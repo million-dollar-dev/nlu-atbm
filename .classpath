@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/javax.mail-1.6.2.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mssql-jdbc-12.4.2.jre11.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/slf4j-api-2.0.11.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/postgresql-42.7.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
