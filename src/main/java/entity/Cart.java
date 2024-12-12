@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-import org.apache.catalina.tribes.util.Arrays;
 
 import dao.ProductDAO;
 

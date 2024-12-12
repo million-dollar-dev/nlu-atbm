@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Keys</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .modal-title {
+            margin: 0 auto;
+        }
+        .form-label {
+            width: 40%;
+            text-align: right;
+            padding-right: 10px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-group .form-check-inline {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Application Keys</h1>
+                <p class="text-muted">
+                    Application keys are used as a pair of Key ID and Application Key. This allows B2 to communicate securely with different devices or apps.
+                </p>
+
+                <div class="mb-4">
+                    <h3>Master Application Key</h3>
+                    <div class="p-3 bg-light border rounded">
+                        <p><strong>Key ID:</strong> 539a9dc28e85</p>
+                        <p><strong>Key Name:</strong> Master Application Key</p>
+                        <p><strong>Capabilities:</strong> bypassGovernance, listAllBucketNames, deleteBuckets, ...</p>
+                        <p><strong>Expiration:</strong> Never</p>
+                        <p><strong>Name Prefix:</strong> (none)</p>
+                        <a href="#" class="btn btn-primary">Generate New Master Application Key</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Your Application Keys</h3>
+                    <button class="btn btn-primary mb-3" onclick="openModal()">Add a New Application Key</button>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <p><strong>Key ID:</strong> 00553a9dc28e85000000003</p>
+                            <p><strong>Key Name:</strong> Key 1</p>
+                            <p><strong>Capabilities:</strong> bypassGovernance, deleteBuckets, ...</p>
+                            <p><strong>Expiration:</strong> (none)</p>
+                            <p><strong>Name Prefix:</strong> (none)</p>
+                            <a href="#" class="btn btn-danger btn-sm">Delete Key</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title text-center" id="modalLabel">Add Application Key</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="keyName" class="form-label">Name of Key</label>
+                            <input type="text" class="form-control" id="keyName" name="keyName">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bucketName" class="form-label">Allow access to Bucket(s)</label>
+                            <select id="bucketName" name="bucketName" class="form-select">
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Type of Access</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="readWrite" name="accessType" value="readWrite" class="form-check-input" checked>
+                                    <label for="readWrite" class="form-check-label">Read and Write</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="readOnly" name="accessType" value="readOnly" class="form-check-input">
+                                    <label for="readOnly" class="form-check-label">Read Only</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="writeOnly" name="accessType" value="writeOnly" class="form-check-input">
+                                    <label for="writeOnly" class="form-check-label">Write Only</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="namePrefix" class="form-label">File name prefix (optional)</label>
+                            <input type="text" class="form-control" id="namePrefix" name="namePrefix">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duration" class="form-label">Duration (seconds) (optional)</label>
+                            <input type="number" class="form-control" id="duration" name="duration">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-end">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Create New Key</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openModal() {
+            var modal = new bootstrap.Modal(document.getElementById('modal'));
+            modal.show();
+        }
+    </script>
+</body>
+</html>

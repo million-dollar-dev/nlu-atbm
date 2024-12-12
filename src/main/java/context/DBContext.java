@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class DBContext {
 	private final String serverName = "localhost";
 	private final String dbName = "LTW_DB";
-	private final String portNumber = "1433";
-	private final String userId = "sa";
-	private final String password = "sa123";
+	private final String portNumber = "1434";
+	private final String userId = "DESKTOP-7LLJ8B9\\MSI";
+	private final String password = "";
 	private Connection connection;
 	private static DBContext instance;
 	
