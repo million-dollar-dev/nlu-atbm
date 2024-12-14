@@ -56,6 +56,9 @@
 	display: none;
 }
 
+<<<<<<<
+HEAD
+
 .text-white-add {
 	color: white;
 	!
@@ -233,7 +236,7 @@
 										<div class=""
 											style="display: flex; justify-content: space-between; align-items: center;">
 											<button type="submit" class="custom-btn" id="copyKey">
-												Copy to clipboard <i class="fa fa-clone"> </i> 
+												Copy to clipboard <i class="fa fa-clone"> </i>
 											</button>
 											<button type="submit" class="custom-btn" id="downKey">
 												Tải xuống file <i class="fa fa-download"></i>
@@ -292,7 +295,8 @@
 
 									<div class="alert alert-warning">
 										<strong>Lưu ý:</strong> Khi sao chép các key, kiểm tra để đảm
-										bảo không có ký tự ẩn gây lỗi. Nếu phát hiện lộ secret có thể report phía dưới.
+										bảo không có ký tự ẩn gây lỗi. Nếu phát hiện lộ secret có thể
+										report phía dưới.
 									</div>
 
 									<p class="mt-4">Nếu cần hỗ trợ hoặc hướng dẫn thêm, vui
@@ -301,13 +305,15 @@
 							</div>
 							<div class="ps-shipping">
 								<h3>HỖ TRỢ KHI LỘ SECRET KEY</h3>
-								<p >
+								<p>
 									VUI LÒNG ẤN LINK SAO ĐỂ NHẬN ĐƯỢC MAIL HỖ TRỢ<br> <a
-										href="login.jsp"><i class="fa fa-headphones" aria-hidden="true"></i> <strong>Nhận hộ trợ</strong> </a><br> 
+										href="login.jsp"><i class="fa fa-headphones"
+										aria-hidden="true"></i> <strong>Nhận hộ trợ</strong> </a><br>
 								</p>
 								<div class="alert alert-warning">
-										<strong>Lưu ý:</strong> Nếu không thấy mail có thể kiểm tra mục spam. Hãy đọc kỹ mail để được hướng dẫn.
-									</div>
+									<strong>Lưu ý:</strong> Nếu không thấy mail có thể kiểm tra mục
+									spam. Hãy đọc kỹ mail để được hướng dẫn.
+								</div>
 							</div>
 						</div>
 					</div>
@@ -431,8 +437,7 @@
 		}
 		emailInput.addEventListener("input", checkForChanges);
 		phoneInput.addEventListener("input", checkForChanges);
-		addressInput.addEventListener("input", checkForChanges);
-		
+		addressInput.addEventListener("input", checkForChanges);		
 		
 		// Mapping for dropdown options based on selected algorithm
 	    const keySizes = {
