@@ -1,0 +1,30 @@
+# Ignore build directories
+/build/
+/target/
+/out/
+/bin/
+
+
+# Ignore Eclipse-specific files
+.project
+.classpath
+.settings/
+.metadata/
+
+# Ignore temporary files
+*.tmp
+*.log
+*.bak
+*.swp
+
+# Ignore IDE files (Eclipse, IntelliJ, NetBeans, etc.)
+*.iml
+.idea/
+.vscode/
+
+# Ignore Maven or Gradle output
+*.war
+*.jar
+*.ear
+*.zip
+
