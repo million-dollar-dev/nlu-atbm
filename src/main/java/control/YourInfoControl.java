@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.KeyDAO;
 import dao.OrderDAO;
 import dao.UserDAO;
 import entity.OrderRow;
 import entity.User;
+import entity.UserKey;
 
 @WebServlet("/yourInfo")
 public class YourInfoControl extends HttpServlet {
@@ -40,7 +42,10 @@ public class YourInfoControl extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			UserDAO userDao = new UserDAO();
 			User userInfo = userDao.getUserById(String.valueOf(id));
+			KeyDAO keyDao = new KeyDAO();
+			UserKey key = keyDao.getKeyByUserId(id);
 			request.setAttribute("user", userInfo);
+			request.setAttribute("key", key);
 			request.getRequestDispatcher("your-info.jsp").forward(request, response);
 		}
 	}
