@@ -125,7 +125,6 @@
 											</tr>
 										</thead>
 										<tbody>
-
 											<c:forEach items="${cart.items}" var="item">
 												<tr>
 													<td>${item.product.name}</td>
@@ -133,9 +132,7 @@
 															value="${(item.product.price / 100 * (100 - item.product.sale)) * item.quantity}"
 															currencyCode="VND" /></td>
 												</tr>
-
 											</c:forEach>
-
 										</tbody>
 									</table>
 								</div>

@@ -187,17 +187,27 @@ HEAD
 										</h3>
 									</header>
 									<footer>
-										<p>
-											<i class="fa fa-info"></i> <label>Key ID: </label> 123
-										</p>
-										<p>
-											<i class="fa fa-key"></i><label>Public key: </label>
-											123321312321
-										</p>
-										<p>
-											<i class="fa fa-clock-o"></i><label>Expiration: </label>
-											12-12-1999
-										</p>
+										<c:choose>
+											<c:when test="${key == null}">
+												<div class="alert alert-danger mt-8">
+													<strong>Lưu ý:</strong> Bạn chưa có key bảo mật vui lòng tạo key!
+												</div>
+											</c:when>
+											<c:otherwise>
+												<p>
+													<i class="fa fa-info"></i> <label>Key ID: </label>
+													${key.keyId}
+												</p>
+												<p>
+													<i class="fa fa-key"></i> <label>Public key: </label>
+													${key.key}
+												</p>
+												<p>
+													<i class="fa fa-clock-o"></i> <label>Expiration: </label>
+													${key.expireAt}
+												</p>
+											</c:otherwise>
+										</c:choose>
 
 										<button type="submit" class="custom-btn" id="showPopupBtn">
 											Tạo master key mới <i class="ps-icon-next"></i>
