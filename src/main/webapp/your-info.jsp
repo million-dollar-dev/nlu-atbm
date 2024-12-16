@@ -190,7 +190,8 @@ HEAD
 										<c:choose>
 											<c:when test="${key == null}">
 												<div class="alert alert-danger mt-8">
-													<strong>Lưu ý:</strong> Bạn chưa có key bảo mật vui lòng tạo key!
+													<strong>Lưu ý:</strong> Bạn chưa có key bảo mật vui lòng
+													tạo key!
 												</div>
 											</c:when>
 											<c:otherwise>
@@ -218,43 +219,45 @@ HEAD
 										</div>
 									</footer>
 								</div>
-								<div class="ps-contact__block create-suc"
-									data-mh="contact-block">
-									<header>
-										<div class="alert alert-info" role="alert">
-											<strong>Thành công!</strong> Application key của bạn đã được
-											tạo.<strong>Nó chỉ xuất hiện ở đây 1 lần</strong>
-										</div>
-									</header>
-									<footer>
-										<p>
-											<i class="fa fa-info"></i> <label>Key ID: </label> 123
-										</p>
-										<p>
-											<i class="fa fa-key"></i><label>Public key: </label>
-											123321312321
-										</p>
-										<p>
-											<i class="fa fa-key"></i><label>Secret key: </label>
-											123321312321
-										</p>
-										<p>
-											<i class="fa fa-clock-o"></i><label>Expiration: </label>
-											12-12-1999
-										</p>
+								<c:if test="${createdKey != null}">
+									<div class="ps-contact__block create-suc"
+										data-mh="contact-block">
+										<header>
+											<div class="alert alert-info" role="alert">
+												<strong>Thành công!</strong> Application key của bạn đã được
+												tạo. <strong>Nó chỉ xuất hiện ở đây 1 lần</strong>
+											</div>
+										</header>
+										<footer>
+											<p>
+												<i class="fa fa-info"></i> <label>Key ID: </label>
+												${createdKey.keyId}
+											</p>
+											<p>
+												<i class="fa fa-key"></i><label>Public key: </label>
+												${publicKey}
+											</p>
+											<p>
+												<i class="fa fa-key"></i><label>Secret key: </label>
+												${secretKey}
+											</p>
+											<p>
+												<i class="fa fa-clock-o"></i><label>Expiration: </label>
+												${createdKey.expireAt}
+											</p>
 
-										<div class=""
-											style="display: flex; justify-content: space-between; align-items: center;">
-											<button type="submit" class="custom-btn" id="copyKey">
-												Copy to clipboard <i class="fa fa-clone"> </i>
-											</button>
-											<button type="submit" class="custom-btn" id="downKey">
-												Tải xuống file <i class="fa fa-download"></i>
-											</button>
-										</div>
-
-									</footer>
-								</div>
+											<div
+												style="display: flex; justify-content: space-between; align-items: center;">
+												<button type="submit" class="custom-btn" id="copyKey">
+													Copy to clipboard <i class="fa fa-clone"> </i>
+												</button>
+												<button type="submit" class="custom-btn" id="downKey">
+													Tải xuống file <i class="fa fa-download"></i>
+												</button>
+											</div>
+										</footer>
+									</div>
+								</c:if>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
@@ -340,17 +343,18 @@ HEAD
 							file</button>
 					</div>
 					<div class="modal-body">
-						<form>
+						<form action="createKey" method="POST">
 							<div class="mb-3">
+							<input type="hidden" name="userId" value="${user.userId}">
 								<label class="form-label">Thuật toán tạo key:</label>
 								<div>
 									<div class="form-check">
-										<input class="form-check-input" type="radio" name="accessType"
+										<input class="form-check-input" type="radio" name="algoKey"
 											id="rsa" value="RSA" checked> <label
 											class="form-check-label" for="rsa">RSA</label>
 									</div>
 									<div class="form-check">
-										<input class="form-check-input" type="radio" name="accessType"
+										<input class="form-check-input" type="radio" name="algoKey"
 											id="dsa" value="DSA"> <label class="form-check-label"
 											for="dsa">DSA</label>
 									</div>
@@ -358,23 +362,25 @@ HEAD
 							</div>
 							<div class="mb-3">
 								<label for="keySize" class="form-label">Kích thước key:</label>
-								<select class="form-select" id="keySize">
+								<select class="form-select" id="keySize" name="keySize">
 
 								</select>
 							</div>
 							<div class="mb-3">
 								<label for="validDuration" class="form-label">Duration
 									(seconds): (optional)</label> <input type="number" class="form-control"
-									id="validDuration"
+									id="validDuration" name="expireTime"
 									placeholder="Positive integer less than 1000 days (in seconds)">
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="custom-btn-form">Tạo key
+									mới</button>
+								<button type="button"
+									class="custom-btn-form btn-danger bg-danger" id="cancelBtn">Hủy</button>
 							</div>
 						</form>
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="custom-btn-form">Tạo key mới</button>
-						<button type="button" class="custom-btn-form btn-danger bg-danger"
-							id="cancelBtn">Hủy</button>
-					</div>
+
 				</div>
 			</div>
 		</div>

@@ -43,7 +43,7 @@ public class YourInfoControl extends HttpServlet {
 			UserDAO userDao = new UserDAO();
 			User userInfo = userDao.getUserById(String.valueOf(id));
 			KeyDAO keyDao = new KeyDAO();
-			UserKey key = keyDao.getKeyByUserId(id);
+			UserKey key = keyDao.getKeyActiveByUserId(id);
 			request.setAttribute("user", userInfo);
 			request.setAttribute("key", key);
 			request.getRequestDispatcher("your-info.jsp").forward(request, response);
