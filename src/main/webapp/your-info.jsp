@@ -56,8 +56,9 @@
 	display: none;
 }
 
-<<<<<<<
-HEAD
+.publicKey {
+	transition: all 0.3s ease;
+}
 
 .text-white-add {
 	color: white;
@@ -200,8 +201,13 @@ HEAD
 													${key.keyId}
 												</p>
 												<p>
-													<i class="fa fa-key"></i> <label>Public key: </label>
-													${key.key}
+													<i class="fa fa-key"></i> <label>Public key: </label> <span
+														class="publicKey"
+														style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: block; max-width: 100%; overflow: hidden;">
+														${key.key} </span>
+													<button class="toggleButton"
+														style="background: none; border: none; color: blue; cursor: pointer;">Xem
+														thêm</button>
 												</p>
 												<p>
 													<i class="fa fa-clock-o"></i> <label>Expiration: </label>
@@ -219,7 +225,7 @@ HEAD
 										</div>
 									</footer>
 								</div>
-								<c:if test="${createdKey != null}">
+								<c:if test="${secretKey != null}">
 									<div class="ps-contact__block create-suc"
 										data-mh="contact-block">
 										<header>
@@ -231,19 +237,30 @@ HEAD
 										<footer>
 											<p>
 												<i class="fa fa-info"></i> <label>Key ID: </label>
-												${createdKey.keyId}
+												${key.keyId}
 											</p>
 											<p>
-												<i class="fa fa-key"></i><label>Public key: </label>
-												${publicKey}
+												<i class="fa fa-key"></i> <label>Public key: </label> <span
+													class="publicKey"
+													style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: block; max-width: 100%; overflow: hidden;">
+													${publicKey} </span>
+												<button class="toggleButton"
+													style="background: none; border: none; color: blue; cursor: pointer;">Xem
+													thêm</button>
 											</p>
 											<p>
-												<i class="fa fa-key"></i><label>Secret key: </label>
-												${secretKey}
+												<i class="fa fa-key"></i> <label>Secret key: </label> <span
+													class="publicKey"
+													style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: block; max-width: 100%; overflow: hidden;">
+													${secretKey} </span>
+												<button class="toggleButton"
+													style="background: none; border: none; color: blue; cursor: pointer;">Xem
+													thêm</button>
 											</p>
 											<p>
-												<i class="fa fa-clock-o"></i><label>Expiration: </label>
-												${createdKey.expireAt}
+												<i class="fa fa-clock-o"></i><label>Expiration: </label> <span
+													style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: block; max-width: 100%; overflow: hidden;">
+													${key.expireAt} </span>
 											</p>
 
 											<div
@@ -251,7 +268,7 @@ HEAD
 												<button type="submit" class="custom-btn" id="copyKey">
 													Copy to clipboard <i class="fa fa-clone"> </i>
 												</button>
-												<button type="submit" class="custom-btn" id="downKey">
+												<button class="custom-btn" id="downKey">
 													Tải xuống file <i class="fa fa-download"></i>
 												</button>
 											</div>
@@ -345,7 +362,7 @@ HEAD
 					<div class="modal-body">
 						<form action="createKey" method="POST">
 							<div class="mb-3">
-							<input type="hidden" name="userId" value="${user.userId}">
+								<input type="hidden" name="userId" value="${user.userId}">
 								<label class="form-label">Thuật toán tạo key:</label>
 								<div>
 									<div class="form-check">
@@ -503,6 +520,48 @@ HEAD
 	    	popupModal.style.display = "none";
 	        pageOverlay.style.display = "none";
 	    });
+	    
+	    
+	    document.addEventListener("DOMContentLoaded", function () {
+	        const buttons = document.querySelectorAll(".toggleButton");
+
+	        buttons.forEach(function (button) {
+	            button.addEventListener("click", function () {
+	                // Lấy phần tử <span> liên quan đến nút hiện tại
+	                const publicKeyElement = button.previousElementSibling;
+
+	                // Kiểm tra và thay đổi trạng thái hiển thị
+	                if (publicKeyElement.style.whiteSpace === "nowrap") {
+	                    // Mở rộng nội dung
+	                    publicKeyElement.style.whiteSpace = "normal";
+	                    publicKeyElement.style.overflow = "visible";
+	                    publicKeyElement.style.textOverflow = "unset";
+	                    button.textContent = "Thu gọn"; // Đổi nút thành "Thu gọn"
+	                } else {
+	                    // Thu gọn nội dung
+	                    publicKeyElement.style.whiteSpace = "nowrap";
+	                    publicKeyElement.style.overflow = "hidden";
+	                    publicKeyElement.style.textOverflow = "ellipsis";
+	                    button.textContent = "Xem thêm"; // Đổi nút thành "Xem thêm"
+	                }
+	            });
+	        });
+	    });
+	   
+        
+        // Chức năng tải xuống file
+        document.getElementById("downKey").addEventListener("click", function () {
+            const content = `User ID:\n${user.userId}\nPublic Key:\n${publicKey}\nSecret Key:\n${secretKey}\nKey type:\n${key.keyType}\nKey size:${key.keySize}\nCreated at:\n${key.createdAt}\nExpire at:\n${key.expireAt}`;
+            const blob = new Blob([content], { type: "text/plain" });
+            const fileUrl = URL.createObjectURL(blob);
+			console.log('tải')
+            const downloadLink = document.createElement("a");
+            downloadLink.href = fileUrl;
+            downloadLink.download = "keys.txt"; // Tên file tải xuống
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        });
 	</script>
 </body>
 </html>

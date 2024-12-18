@@ -115,7 +115,7 @@ public class KeyDAO {
 				+ " values (?, ?, ?, ?, ?, ?, ?)";
 		try {
 			conn = DBContext.getInstance().getConnection();
-			ps = conn.prepareStatement(query);
+			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, userId);
 			ps.setString(2, publicKey);
 			ps.setString(3, keyType);
@@ -123,7 +123,7 @@ public class KeyDAO {
 			LocalDateTime now = LocalDateTime.now();
 			Timestamp timestampCreate = Timestamp.valueOf(now);
 			ps.setTimestamp(5, timestampCreate);
-			Timestamp expireDate = new Timestamp(9999, 12, 31, 23, 59, 59, 00);
+			Timestamp expireDate = Timestamp.valueOf(LocalDateTime.of(9999, 12, 31, 23, 59, 59));
 			ps.setTimestamp(6, expireDate);
 			ps.setString(7, "Active");
 			int affectedRows = ps.executeUpdate();
@@ -143,6 +143,19 @@ public class KeyDAO {
 			System.out.println(e);
 		}
 		return -1;
+	}
+
+	public void deactivateKeys(String userId) {
+		String query = "UPDATE UserPublicKeys SET IsActive = ? WHERE UserId = " + userId;
+		try {
+			conn = DBContext.getInstance().getConnection();
+			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, "InActive");
+			ps.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	public static void main(String[] args) {
