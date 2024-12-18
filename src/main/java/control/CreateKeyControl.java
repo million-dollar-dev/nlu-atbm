@@ -54,6 +54,7 @@ public class CreateKeyControl extends HttpServlet {
 			String publicKey = key[0];
 			String secretKey = key[1];
 			int keyId;
+			keyDao.deactivateKeys(userId);
 			if (expireTime != 0)
 				keyId = keyDao.createKey(userId, publicKey, algo, keySize, expireTime);
 			else
@@ -62,7 +63,7 @@ public class CreateKeyControl extends HttpServlet {
 			
 			request.setAttribute("publicKey", publicKey);
 			request.setAttribute("secretKey", secretKey);
-			request.setAttribute("createdKey", createdKey);
+			request.setAttribute("key", createdKey);
 			request.getRequestDispatcher("your-info.jsp").forward(request, response);
 		} catch (Exception e) {
 			System.out.println(e);
