@@ -265,9 +265,7 @@
 
 											<div
 												style="display: flex; justify-content: space-between; align-items: center;">
-												<button type="submit" class="custom-btn" id="copyKey">
-													Copy to clipboard <i class="fa fa-clone"> </i>
-												</button>
+
 												<button class="custom-btn" id="downKey">
 													Tải xuống file <i class="fa fa-download"></i>
 												</button>
@@ -356,8 +354,15 @@
 				<div class="modal-content">
 					<div class="modal-header form-header">
 						<h3 class="modal-title">Thêm Application Key</h3>
-						<button class="custom-btn-form load-key-btn">Load Key từ
-							file</button>
+
+						<form action="loadKeyFromFile" method="post"
+							enctype="multipart/form-data" id="fileForm">
+							<input type="hidden" name="userId" value="${user.userId}">
+							<input type="file" name="keyFile" accept=".txt,.pem,.key"
+								style="display: none;" id="fileKeyInput">
+							<button type="button" class="custom-btn-form load-key-btn"
+								onclick="handleLoadKey()">Load Key từ file</button>
+						</form>
 					</div>
 					<div class="modal-body">
 						<form action="createKey" method="POST">
@@ -396,6 +401,13 @@
 									class="custom-btn-form btn-danger bg-danger" id="cancelBtn">Hủy</button>
 							</div>
 						</form>
+
+						<c:if test="${uploadMess != null}">
+							<script>
+											alert(${uploadMess});
+											window.location.href = 'your-info.jsp';
+										</script>
+						</c:if>
 					</div>
 
 				</div>
@@ -551,7 +563,7 @@
         
         // Chức năng tải xuống file
         document.getElementById("downKey").addEventListener("click", function () {
-            const content = `User ID:\n${user.userId}\nPublic Key:\n${publicKey}\nSecret Key:\n${secretKey}\nKey type:\n${key.keyType}\nKey size:${key.keySize}\nCreated at:\n${key.createdAt}\nExpire at:\n${key.expireAt}`;
+            const content = `User ID:${user.userId}\nPublic Key:${publicKey}\nSecret Key:${secretKey}\nKey type:${key.keyType}\nKey size:${key.keySize}\nCreated at:${key.createdAt}\nExpire at:${key.expireAt}`;
             const blob = new Blob([content], { type: "text/plain" });
             const fileUrl = URL.createObjectURL(blob);
 			console.log('tải')
@@ -562,6 +574,21 @@
             downloadLink.click();
             document.body.removeChild(downloadLink);
         });
+        
+        function handleLoadKey() {
+            const fileInput = document.getElementById('fileKeyInput');
+            
+            // Gắn sự kiện onchange để xử lý sau khi chọn file
+            fileInput.onchange = function () {
+                if (fileInput.files.length > 0) {
+                    // Chỉ submit form nếu người dùng đã chọn file
+                    document.getElementById('fileForm').submit();
+                }
+            };
+
+            // Mở cửa sổ chọn file
+            fileInput.click();
+        }
 	</script>
 </body>
 </html>
