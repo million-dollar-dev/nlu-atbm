@@ -43,7 +43,6 @@ public class CreateKeyControl extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String userId = request.getParameter("userId");
-		System.out.println(userId);
 		String algo = request.getParameter("algoKey");
 		int keySize = Integer.valueOf(request.getParameter("keySize"));
 		String expireStr = request.getParameter("expireTime");
