@@ -180,11 +180,11 @@
 										class="ps-btn hidden">Cập nhật</button>
 
 								</form>
-								<h3>Application Keys</h3>
+								<h3>An toàn bảo mật</h3>
 								<div class="ps-contact__block" data-mh="contact-block">
 									<header>
 										<h3>
-											Master key <span> Chính</span>
+											Master key (Chữ ký điện tử)<span> Chính</span>
 										</h3>
 									</header>
 									<footer>
@@ -212,6 +212,7 @@
 												<p>
 													<i class="fa fa-clock-o"></i> <label>Expiration: </label>
 													${key.expireAt}
+
 												</p>
 											</c:otherwise>
 										</c:choose>
@@ -225,54 +226,37 @@
 										</div>
 									</footer>
 								</div>
-								<c:if test="${secretKey != null}">
-									<div class="ps-contact__block create-suc"
-										data-mh="contact-block">
-										<header>
-											<div class="alert alert-info" role="alert">
-												<strong>Thành công!</strong> Application key của bạn đã được
-												tạo. <strong>Nó chỉ xuất hiện ở đây 1 lần</strong>
-											</div>
-										</header>
-										<footer>
-											<p>
-												<i class="fa fa-info"></i> <label>Key ID: </label>
-												${key.keyId}
-											</p>
-											<p>
-												<i class="fa fa-key"></i> <label>Public key: </label> <span
-													class="publicKey"
-													style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: block; max-width: 100%; overflow: hidden;">
-													${publicKey} </span>
-												<button class="toggleButton"
-													style="background: none; border: none; color: blue; cursor: pointer;">Xem
-													thêm</button>
-											</p>
-											<p>
-												<i class="fa fa-key"></i> <label>Secret key: </label> <span
-													class="publicKey"
-													style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: block; max-width: 100%; overflow: hidden;">
-													${secretKey} </span>
-												<button class="toggleButton"
-													style="background: none; border: none; color: blue; cursor: pointer;">Xem
-													thêm</button>
-											</p>
-											<p>
-												<i class="fa fa-clock-o"></i><label>Expiration: </label> <span
-													style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: block; max-width: 100%; overflow: hidden;">
-													${key.expireAt} </span>
-											</p>
+								<div class="ps-contact__block" data-mh="contact-block">
+									<header>
+										<h3>
+											Xác thực 2 bước<span> 2FA</span>
+										</h3>
+									</header>
+									<footer>
+										<c:choose>
+											<c:when test="${isActive2fa}">
+												<div class="alert alert-info mt-8">
+													<strong>Bạn đã kích hoạt xác thực 2 bước.</strong>
+												</div>
+											</c:when>
+											<c:otherwise>
+												<form action="enable2FA" method="post">
+													<div class="alert alert-warning mt-8">
+														<strong>Lưu ý:</strong> Bạn chưa kích hoạt xác thực 2
+														bước!
+													</div>
+													<input type="hidden" name="userId" value="${user.userId}">
+													<input type="hidden" name="email" value="${user.email}">
+													<button type="submit" class="custom-btn" id="showPopupBtn">
+														Tiến hành kích hoạt<i class="ps-icon-next"></i>
+													</button>
+												</form>
+											</c:otherwise>
+										</c:choose>
 
-											<div
-												style="display: flex; justify-content: space-between; align-items: center;">
 
-												<button class="custom-btn" id="downKey">
-													Tải xuống file <i class="fa fa-download"></i>
-												</button>
-											</div>
-										</footer>
-									</div>
-								</c:if>
+									</footer>
+								</div>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
@@ -333,15 +317,22 @@
 							</div>
 							<div class="ps-shipping">
 								<h3>HỖ TRỢ KHI LỘ SECRET KEY</h3>
-								<p>
-									VUI LÒNG ẤN LINK SAO ĐỂ NHẬN ĐƯỢC MAIL HỖ TRỢ<br> <a
-										href="login.jsp"><i class="fa fa-headphones"
-										aria-hidden="true"></i> <strong>Nhận hộ trợ</strong> </a><br>
-								</p>
-								<div class="alert alert-warning">
-									<strong>Lưu ý:</strong> Nếu không thấy mail có thể kiểm tra mục
-									spam. Hãy đọc kỹ mail để được hướng dẫn.
-								</div>
+								<p>VUI LÒNG ẤN LINK SAO ĐỂ NHẬN ĐƯỢC MAIL HỖ TRỢ</p>
+								<form action="reportLossKey" method="post">
+									<input type="hidden" name="userId" value="${user.userId}">
+									<input type="hidden" name="email" value="${user.email}">
+									<button type="submit" class="custom-btn" id="">
+										BÁO CÁO LỘ KEY <i class="fa fa-exclamation-triangle"></i>
+									</button>
+									<div class="alert alert-warning">
+										<strong>Lưu ý:</strong> Nếu không thấy mail có thể kiểm tra
+										mục spam. Hãy đọc kỹ mail để được hướng dẫn.
+									</div>
+								</form>
+
+
+
+
 							</div>
 						</div>
 					</div>
@@ -404,7 +395,7 @@
 
 						<c:if test="${uploadMess != null}">
 							<script>
-											alert(${uploadMess});
+											alert("${uploadMess}");
 											window.location.href = 'your-info.jsp';
 										</script>
 						</c:if>
