@@ -9,10 +9,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import util.DateUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,36 +58,55 @@ public class LoadKeyFromFileControl extends HttpServlet {
 				fileData.append(line).append("\n");
 			}
 		}
-
+		KeyDAO keyDAO = new KeyDAO();
 		// Xử lý nội dung file và trích xuất thông tin
 		String fileContent = fileData.toString();
 		System.out.println(fileContent);
 		StringBuilder result = new StringBuilder();
-
+		String userIdInFile = "", publicKey = "", secretKey = "", keyType = "", keySize = "", createdAtStr = "",
+				expireAtStr = "";
 		try {
 			String[] lines = fileContent.split("\n");
 			for (String line : lines) {
 				if (line.startsWith("User ID:")) {
-					result.append("User ID: ").append(line.split(":")[1].trim()).append("\n");
+					userIdInFile = line.split(":")[1].trim();
 				} else if (line.startsWith("Public Key:")) {
-					result.append("Public Key: ").append(line.split(":")[1].trim()).append("\n");
+					publicKey = line.split(":")[1].trim();
 				} else if (line.startsWith("Secret Key:")) {
-					result.append("Secret Key: ").append(line.split(":")[1].trim()).append("\n");
+					secretKey = line.split(":")[1].trim();
 				} else if (line.startsWith("Key type:")) {
-					result.append("Key Type: ").append(line.split(":")[1].trim()).append("\n");
+					keyType = line.split(":")[1].trim();
 				} else if (line.startsWith("Key size:")) {
-					result.append("Key Size: ").append(line.split(":")[1].trim()).append("\n");
+					keySize = line.split(":")[1].trim();
 				} else if (line.startsWith("Created at:")) {
-					result.append("Created At: ").append(line.split(":")[1].trim()).append("\n");
+					createdAtStr = line.substring(line.indexOf(":") + 1).trim();
 				} else if (line.startsWith("Expire at:")) {
-					result.append("Expire At: ").append(line.split(":")[1].trim()).append("\n");
+					expireAtStr = line.substring(line.indexOf(":") + 1).trim();
 				}
 			}
+			if (userId.equals(userIdInFile)) {
+				if (DateUtil.isAfterNow(expireAtStr)) {
+					
+					keyDAO.deactivateKeys(userId);
+					Timestamp expitreTime = DateUtil.convertToTimestamp(expireAtStr);
+					keyDAO.createKey(userId, publicKey, keyType, Integer.valueOf(keySize), expitreTime);
+					UserDAO userDao = new UserDAO();
+					User userInfo = userDao.getUserById(String.valueOf(userId));
+					KeyDAO keyDao = new KeyDAO();
+					UserKey key = keyDao.getKeyActiveByUserId(Integer.valueOf(userId));
+					request.setAttribute("user", userInfo);
+					request.setAttribute("key", key);
+					
+				} else
+					result.append("Key đã hết hạn");
+			} else
+				result.append("File key không thuộc quyền sở hữu của bạn");
+
 		} catch (Exception e) {
 			result.append("Upload không thành công, vui lòng kiểm tra lại file!").append(e.getMessage());
 		}
 		System.out.println(result);
-		request.setAttribute("uploadMess", result.toString());
+		request.setAttribute("uploadMess", result);
 		request.getRequestDispatcher("yourInfo?id=" + userId).forward(request, response);
 	}
 

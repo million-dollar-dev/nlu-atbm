@@ -23,7 +23,7 @@ public class KeyDAO {
 	public UserKey getKeyActiveByUserId(int id) {
 		String query = "select * from userPublicKeys where UserId = " + id + " and isActive = 'Active'";
 		Timestamp timestamp = null;
-		Date createdAt = null, expiresAt = null;
+		Timestamp createdAt = null, expiresAt = null;
 		try {
 			conn = DBContext.getInstance().getConnection();
 			ps = conn.prepareStatement(query);
@@ -31,11 +31,11 @@ public class KeyDAO {
 			while (rs.next()) {
 				timestamp = rs.getTimestamp("CreatedAt");
 				if (timestamp != null) {
-					createdAt = new Date(timestamp.getTime());
+					createdAt = timestamp;
 				}
 				timestamp = rs.getTimestamp("ExpiresAt");
 				if (timestamp != null) {
-					expiresAt = new Date(timestamp.getTime());
+					expiresAt = timestamp;
 				}
 				boolean isActive = rs.getString("IsActive").equalsIgnoreCase("Active") ? true : false;
 				return new UserKey(Integer.toString(id), rs.getString("PublicKey"), rs.getString("KeyType"),
@@ -50,7 +50,7 @@ public class KeyDAO {
 	public UserKey getKeyActiveByKeyId(int id) {
 		String query = "select * from userPublicKeys where KeyId = " + id + " and isActive = 'Active'";
 		Timestamp timestamp = null;
-		Date createdAt = null, expiresAt = null;
+		Timestamp createdAt = null, expiresAt = null;
 		try {
 			conn = DBContext.getInstance().getConnection();
 			ps = conn.prepareStatement(query);
@@ -58,11 +58,11 @@ public class KeyDAO {
 			while (rs.next()) {
 				timestamp = rs.getTimestamp("CreatedAt");
 				if (timestamp != null) {
-					createdAt = new Date(timestamp.getTime());
+					createdAt = timestamp;
 				}
 				timestamp = rs.getTimestamp("ExpiresAt");
 				if (timestamp != null) {
-					expiresAt = new Date(timestamp.getTime());
+					expiresAt = timestamp;
 				}
 				boolean isActive = rs.getString("IsActive").equalsIgnoreCase("Active") ? true : false;
 				return new UserKey(Integer.toString(id), rs.getString("PublicKey"), rs.getString("KeyType"),
@@ -124,6 +124,41 @@ public class KeyDAO {
 			Timestamp timestampCreate = Timestamp.valueOf(now);
 			ps.setTimestamp(5, timestampCreate);
 			Timestamp expireDate = Timestamp.valueOf(LocalDateTime.of(9999, 12, 31, 23, 59, 59));
+			ps.setTimestamp(6, expireDate);
+			ps.setString(7, "Active");
+			int affectedRows = ps.executeUpdate();
+			if (affectedRows == 0) {
+				throw new SQLException("Creating user failed, no rows affected.");
+			}
+			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					int id = generatedKeys.getInt(1);
+					// Trả về đối tượng User vừa tạo
+					return id;
+				} else {
+					throw new SQLException("Creating user failed, no ID obtained.");
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return -1;
+	}
+	
+	public int createKey(String userId, String publicKey, String keyType, int keySize, Timestamp timepstamp) {
+		String query = "insert into UserPublicKeys(UserId, PublicKey, KeyType, KeySize, CreatedAt, ExpiresAt, IsActive)"
+				+ " values (?, ?, ?, ?, ?, ?, ?)";
+		try {
+			conn = DBContext.getInstance().getConnection();
+			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, userId);
+			ps.setString(2, publicKey);
+			ps.setString(3, keyType);
+			ps.setInt(4, keySize);
+			LocalDateTime now = LocalDateTime.now();
+			Timestamp timestampCreate = Timestamp.valueOf(now);
+			ps.setTimestamp(5, timestampCreate);
+			Timestamp expireDate = timepstamp;
 			ps.setTimestamp(6, expireDate);
 			ps.setString(7, "Active");
 			int affectedRows = ps.executeUpdate();

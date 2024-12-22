@@ -1,5 +1,6 @@
 package entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class UserKey {
@@ -8,10 +9,10 @@ public class UserKey {
 	private String key;
 	private String keyType;
 	private int keySize;
-	private Date createdAt;
-	private Date expireAt;
+	private Timestamp createdAt;
+	private Timestamp expireAt;
 	private boolean isActive;
-	public UserKey(String keyId, String key, String keyType, int keySize, Date createdAt, Date expireAt,
+	public UserKey(String keyId, String key, String keyType, int keySize, Timestamp createdAt, Timestamp expireAt,
 			boolean isActive) {
 		super();
 		this.keyId = keyId;
@@ -55,13 +56,13 @@ public class UserKey {
 	public Date getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
 	public Date getExpireAt() {
 		return expireAt;
 	}
-	public void setExpireAt(Date expireAt) {
+	public void setExpireAt(Timestamp expireAt) {
 		this.expireAt = expireAt;
 	}
 	public boolean isActive() {
