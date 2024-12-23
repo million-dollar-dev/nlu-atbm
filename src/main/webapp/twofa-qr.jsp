@@ -122,7 +122,7 @@ a:hover {
 						<input type="hidden" id="otp-value" name="otp" value="" /> <input
 							type="hidden" id="otp-type" name="otp-type" value="enable2FA" />
 						<input type="hidden" id="userId" name="userId" value="${userId}" />
-						<div class="alert alert-danger" role="alert"></div>
+						<div id="responseMessage" class="alert alert-danger" role="alert" style="display: none;"></div>
 						<div class="d-flex justify-content-center">
 							<button class="btn btn-primary mb-3">Xác thực</button>
 						</div>
@@ -209,11 +209,11 @@ a:hover {
                     	alert('Tài khoản hoặc mật khẩu không chính xác');
                         window.location.href = "yourInfo.jsp";
                     } else {
-                        $("#responseMessage").text(response);
+                        $("#responseMessage").text(response).show();
                     }
                 },
                 error: function () {
-                    $("#responseMessage").text("Đã xảy ra lỗi khi gửi yêu cầu xác thực.");
+                    $("#responseMessage").text("Đã xảy ra lỗi khi gửi yêu cầu xác thực.").show();
                 }
             });
         });
