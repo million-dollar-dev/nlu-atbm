@@ -11,10 +11,12 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import dao.KeyDAO;
 import dao.ProductDAO;
 import entity.Cart;
 import entity.Product;
 import entity.User;
+import entity.UserKey;
 
 @WebServlet("/checkout")
 public class CheckoutTransferControl extends HttpServlet {
@@ -43,17 +45,27 @@ public class CheckoutTransferControl extends HttpServlet {
 				if (c.getName().equals("cart"))
 					txtCookie += c.getValue();
 			}
-		}		
+		}
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		if (user == null)
+		KeyDAO keyDao = new KeyDAO();
+
+		if (user == null) {
 			response.sendRedirect("login.jsp");
-		else {
+		} else {
+			UserKey key = keyDao.getKeyActiveByUserId(user.getUserId());
+			if (key == null) {
+				request.setAttribute("checkKey",
+						"Bạn chưa tạo Master Key! Thực hiện tạo Master Key để tiếp tục mua hàng");
+				request.getRequestDispatcher("checkout.jsp").forward(request, response);
+				return;
+			}
+
 			Cart cart = new Cart(txtCookie, listAllProduct);
 			request.setAttribute("cart", cart);
 			request.setAttribute("user", user);
 			request.getRequestDispatcher("checkout.jsp").forward(request, response);
-		}			
+		}
 	}
 
 	/**
@@ -67,3 +79,4 @@ public class CheckoutTransferControl extends HttpServlet {
 	}
 
 }
+
